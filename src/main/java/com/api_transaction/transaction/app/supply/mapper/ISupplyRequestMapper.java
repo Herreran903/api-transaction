@@ -12,5 +12,6 @@ public interface ISupplyRequestMapper {
     @Mapping(target = SUPPLY_ID, ignore = true)
     @Mapping(target = SUPPLY_DATE, ignore = true)
     @Mapping(target = SUPPLY_USER, ignore = true)
+    @Mapping(target = SUPPLY_RESTOCK_DATE, ignore = true)
     Supply toSupply(SupplyRequest supplyRequest);
 }

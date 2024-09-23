@@ -2,6 +2,7 @@ package com.api_transaction.transaction.domain.supply.usecase;
 
 import com.api_transaction.transaction.domain.error.ErrorDetail;
 import com.api_transaction.transaction.domain.supply.api.ISupplyServicePort;
+import com.api_transaction.transaction.domain.supply.exception.ex.SupplyNotFoundByIdProductException;
 import com.api_transaction.transaction.domain.supply.exception.ex.SupplyNotValidFieldException;
 import com.api_transaction.transaction.domain.supply.exception.ex.UserInvalidException;
 import com.api_transaction.transaction.domain.supply.model.Supply;
@@ -9,12 +10,12 @@ import com.api_transaction.transaction.domain.supply.spi.IFeignAdapterPort;
 import com.api_transaction.transaction.domain.supply.spi.IJwtAdapterPort;
 import com.api_transaction.transaction.domain.supply.spi.ISupplyPersistencePort;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.api_transaction.transaction.domain.supply.exception.SupplyExceptionMessage.EMPTY_PRODUCT;
-import static com.api_transaction.transaction.domain.supply.exception.SupplyExceptionMessage.MIN_AMOUNT;
+import static com.api_transaction.transaction.domain.supply.exception.SupplyExceptionMessage.*;
 import static com.api_transaction.transaction.domain.supply.util.SupplyConstants.*;
 import static com.api_transaction.transaction.domain.util.GlobalExceptionMessage.INVALID_OBJECT;
 import static com.api_transaction.transaction.domain.util.GlobalExceptionMessage.INVALID_USER;
@@ -59,6 +60,7 @@ public class SupplyUseCase implements ISupplyServicePort {
 
         supply.setUser(userId);
         supply.setDate(LocalDateTime.now());
+        supply.setRestockDate(LocalDate.now().plusMonths(1));
 
         feignAdapterPort.updateStock(supply.getProduct(), supply.getAmount());
 
@@ -68,5 +70,13 @@ public class SupplyUseCase implements ISupplyServicePort {
             feignAdapterPort.updateStock(supply.getProduct(), -supply.getAmount());
             throw e;
         }
+    }
+
+    @Override
+    public LocalDate getRestockDate(Long productId) {
+         Supply supply = supplyPersistencePort.getSupplyByProductId(productId)
+                 .orElseThrow(() -> new SupplyNotFoundByIdProductException(NO_FOUND_SUPPLY));
+
+         return supply.getRestockDate();
     }
 }

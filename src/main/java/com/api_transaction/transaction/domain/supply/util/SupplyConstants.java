@@ -12,6 +12,7 @@ public class SupplyConstants {
     public static final String SUPPLY_USER = "user";
     public static final String SUPPLY_AMOUNT = "amount";
     public static final String SUPPLY_DATE = "date";
+    public static final String SUPPLY_RESTOCK_DATE = "restockDate";
 
     public static final String SUPPLY_TABLE_NAME = "supplies";
 }

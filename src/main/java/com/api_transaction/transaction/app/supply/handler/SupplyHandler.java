@@ -1,5 +1,6 @@
 package com.api_transaction.transaction.app.supply.handler;
 
+import com.api_transaction.transaction.app.supply.dto.RestockDateResponse;
 import com.api_transaction.transaction.app.supply.dto.SupplyRequest;
 import com.api_transaction.transaction.app.supply.mapper.ISupplyRequestMapper;
 import com.api_transaction.transaction.domain.supply.api.ISupplyServicePort;
@@ -15,5 +16,10 @@ public class SupplyHandler implements ISupplyHandler {
     @Override
     public void createSupply(SupplyRequest supplyRequest, String token) {
         supplyServicePort.createSupply(supplyRequestMapper.toSupply(supplyRequest), token);
+    }
+
+    @Override
+    public RestockDateResponse getRestockDate(Long productId) {
+        return new RestockDateResponse(supplyServicePort.getRestockDate(productId));
     }
 }
