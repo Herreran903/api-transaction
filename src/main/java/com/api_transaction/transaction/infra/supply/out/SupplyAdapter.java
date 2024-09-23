@@ -3,6 +3,8 @@ package com.api_transaction.transaction.infra.supply.out;
 import com.api_transaction.transaction.domain.supply.model.Supply;
 import com.api_transaction.transaction.domain.supply.spi.ISupplyPersistencePort;
 
+import java.util.Optional;
+
 public class SupplyAdapter implements ISupplyPersistencePort {
     private final ISupplyRepository supplyRepository;
     private final ISupplyMapper supplyMapper;
@@ -15,5 +17,10 @@ public class SupplyAdapter implements ISupplyPersistencePort {
     @Override
     public void createSupply(Supply supply) {
         supplyRepository.save(supplyMapper.toEntity(supply));
+    }
+
+    @Override
+    public Optional<Supply> getSupplyByProductId(Long productId) {
+        return supplyRepository.findByProduct(productId).map(supplyMapper::toSupply);
     }
 }

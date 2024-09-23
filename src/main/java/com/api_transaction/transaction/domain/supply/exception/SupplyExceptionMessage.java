@@ -16,4 +16,7 @@ public class SupplyExceptionMessage {
     public static final String MIN_AMOUNT =
             "The 'amount' field must be greater than " + MIN_AMOUNT_VALUE;
 
+    public static final String NO_FOUND_SUPPLY =
+            "Supply does not found";
+
 }

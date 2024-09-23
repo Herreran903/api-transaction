@@ -1,5 +1,6 @@
 package com.api_transaction.transaction.domain.supply.usecase;
 
+import com.api_transaction.transaction.domain.supply.exception.ex.SupplyNotFoundByIdProductException;
 import com.api_transaction.transaction.domain.supply.exception.ex.SupplyNotValidFieldException;
 import com.api_transaction.transaction.domain.supply.exception.ex.UserInvalidException;
 import com.api_transaction.transaction.domain.supply.model.Supply;
@@ -13,6 +14,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.time.LocalDate;
+import java.util.Optional;
+
+import static com.api_transaction.transaction.domain.supply.exception.SupplyExceptionMessage.NO_FOUND_SUPPLY;
 import static com.api_transaction.transaction.utils.TestConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -37,7 +42,7 @@ class SupplyUseCaseTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        supply = new Supply(VALID_SUPPLY_ID, VALID_PRODUCT_ID, VALID_AMOUNT, VALID_DATE, VALID_USER_ID);
+        supply = new Supply(VALID_SUPPLY_ID, VALID_PRODUCT_ID, VALID_AMOUNT, VALID_DATE, VALID_RESTORE_DATE, VALID_USER_ID);
     }
 
     @Test
@@ -103,5 +108,30 @@ class SupplyUseCaseTest {
         assertNotNull(supply.getDate());
     }
 
+    @Test
+    void shouldReturnRestockDateSuccessfully() {
+        when(supplyPersistencePort.getSupplyByProductId(VALID_PRODUCT_ID))
+                .thenReturn(Optional.of(supply));
 
+        LocalDate result = supplyUseCase.getRestockDate(VALID_SUPPLY_ID);
+
+        assertEquals(VALID_RESTORE_DATE, result);
+        verify(supplyPersistencePort, times(1)).getSupplyByProductId(VALID_SUPPLY_ID);
+    }
+
+    @Test
+    void shouldThrowSupplyNotFoundByIdProductExceptionWhenSupplyNotFound() {
+        Long invalidProductId = 2L;
+
+        when(supplyPersistencePort.getSupplyByProductId(invalidProductId))
+                .thenReturn(Optional.empty());
+
+        SupplyNotFoundByIdProductException exception = assertThrows(
+                SupplyNotFoundByIdProductException.class,
+                () -> supplyUseCase.getRestockDate(invalidProductId)
+        );
+
+        assertEquals(NO_FOUND_SUPPLY, exception.getMessage());
+        verify(supplyPersistencePort, times(1)).getSupplyByProductId(invalidProductId);
+    }
 }

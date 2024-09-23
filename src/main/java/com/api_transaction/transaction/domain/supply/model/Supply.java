@@ -1,5 +1,6 @@
 package com.api_transaction.transaction.domain.supply.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Supply {
@@ -7,15 +8,25 @@ public class Supply {
     private Long product;
     private int amount;
     private LocalDateTime date;
+    private LocalDate restockDate;
     private Long user;
 
 
-    public Supply(Long id, Long product, int amount, LocalDateTime date, Long user) {
+    public Supply(Long id, Long product, int amount, LocalDateTime date, LocalDate restockDate, Long user) {
         this.id = id;
         this.product = product;
         this.amount = amount;
         this.date = date;
+        this.restockDate = restockDate;
         this.user = user;
+    }
+
+    public LocalDate getRestockDate() {
+        return restockDate;
+    }
+
+    public void setRestockDate(LocalDate restockDate) {
+        this.restockDate = restockDate;
     }
 
     public Long getId() {

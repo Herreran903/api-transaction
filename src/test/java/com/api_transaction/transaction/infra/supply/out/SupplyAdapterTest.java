@@ -28,8 +28,8 @@ class SupplyAdapterTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        supply = new Supply(VALID_SUPPLY_ID, VALID_PRODUCT_ID, VALID_AMOUNT, VALID_DATE, VALID_USER_ID);
-        supplyEntity = new SupplyEntity(VALID_SUPPLY_ID, VALID_PRODUCT_ID, VALID_AMOUNT, VALID_DATE, VALID_USER_ID);
+        supply = new Supply(VALID_SUPPLY_ID, VALID_PRODUCT_ID, VALID_AMOUNT, VALID_DATE, VALID_RESTORE_DATE, VALID_USER_ID);
+        supplyEntity = new SupplyEntity(VALID_SUPPLY_ID, VALID_PRODUCT_ID, VALID_AMOUNT, VALID_DATE, VALID_RESTORE_DATE, VALID_USER_ID);
     }
 
     @Test

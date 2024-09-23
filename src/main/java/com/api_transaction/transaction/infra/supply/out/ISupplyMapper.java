@@ -6,4 +6,5 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface ISupplyMapper {
     SupplyEntity toEntity(Supply supply);
+    Supply toSupply(SupplyEntity supplyEntity);
 }
